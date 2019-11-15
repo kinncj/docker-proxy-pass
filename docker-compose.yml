@@ -7,27 +7,33 @@ services:
       - "80:80"
       - "443:443"
     links:
-      - php
+      - site1app
+      - site2app
     volumes:
       - ./sites:/etc/nginx/conf.d
       - ./conf/nginx.conf:/etc/nginx/nginx.conf
     volumes_from:
-      - site1
-      - site2
+      - site1files
+      - site2files
 
-  php:
+  site1app:
     build: .
     working_dir: /var/www
     volumes_from:
-      - site1
-      - site2
+      - site1files
 
-  site1:
+  site2app:
+    build: .
+    working_dir: /var/www
+    volumes_from:
+      - site2files
+
+  site1files:
     image: busybox
     volumes:
       - ./site1:/var/www/site1
 
-  site2:
+  site2files:
     image: busybox
     volumes:
       - ./site2:/var/www/site2
