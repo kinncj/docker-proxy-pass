@@ -1,0 +1,33 @@
+version: '2'
+services:
+
+  web:
+    image: nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    links:
+      - php
+    volumes:
+      - ./sites:/etc/nginx/conf.d
+      - ./conf/nginx.conf:/etc/nginx/nginx.conf
+    volumes_from:
+      - site1
+      - site2
+
+  php:
+    build: .
+    working_dir: /var/www
+    volumes_from:
+      - site1
+      - site2
+
+  site1:
+    image: busybox
+    volumes:
+      - ./site1:/var/www/site1
+
+  site2:
+    image: busybox
+    volumes:
+      - ./site2:/var/www/site2
